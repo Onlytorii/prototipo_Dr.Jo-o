@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Importando componentes
 import Login from './page/Auth/Login.jsx'; 
-import Sidebar from './components/Layout/Sidebar.jsx';
+import Sidebar from './components/Layout/SideBar.jsx';
 import Welcome from './page/Auth/Welcome.jsx'; // Certifique-se de ter este arquivo
 import Dashboard from './page/Auth/Dashboard.jsx';
 import PaginaProcessos from './page/Auth/GestaoDeProcesso.jsx';
