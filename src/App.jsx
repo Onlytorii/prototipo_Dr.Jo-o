@@ -8,7 +8,7 @@ import Welcome from './page/Auth/Welcome.jsx'; // Certifique-se de ter este arqu
 import Dashboard from './page/Auth/Dashboard.jsx';
 import PaginaProcessos from './page/Auth/GestaoDeProcesso.jsx';
 import PaginaPrazos from './page/Auth/Prazos.jsx';
-import PaginaCRM from './page/Auth/CRM.jsx';
+import PaginaCRM from './page/Auth/Crm.jsx';
 import Agenda from './page/Auth/Agenda.jsx';
 import Financeiro from './page/Auth/Financeiro.jsx';
 
