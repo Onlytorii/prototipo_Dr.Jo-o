@@ -19,7 +19,7 @@ const Dashboard = () => {
         {/* Cabeçalho - Ajustado para não ter azul */}
         <div className="mb-5 p-4" style={{ backgroundColor: colors.section, borderLeft: `5px solid ${colors.accent}`, borderRadius: '2px' }}>
           <h2 className="fw-bold m-0" style={{ color: colors.text, fontFamily: 'serif', letterSpacing: '1px' }}>
-            Dr. João Augusto
+            Dr. João 
           </h2>
           <p className="m-0 mt-1 small text-uppercase" style={{ color: colors.accent, letterSpacing: '2px', fontWeight: 'bold' }}>
             Painel de Controle Jurídico

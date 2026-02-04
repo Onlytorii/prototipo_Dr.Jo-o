@@ -8,7 +8,9 @@ import {
   Calendar, 
   DollarSign, 
   LogOut,
-  ChevronRight
+  ChevronRight,
+  Globe,        // Adicionado para o site
+  ExternalLink  // Adicionado para o PJE
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -31,14 +33,20 @@ const Sidebar = () => {
     { path: '/financeiro', label: 'Honorários', icon: <DollarSign size={20} /> },
   ];
 
+  // Novos links externos
+  const externalLinks = [
+    { url: 'https://www.pje.jus.br/navegador/', label: 'Acessar PJE', icon: <ExternalLink size={20} /> },
+    { url: 'https://www.processoagil.com.br/', label: 'Processo Agil', icon: <Globe size={20} /> },
+  ];
+
   return (
     <div className="d-flex flex-column vh-100 shadow-lg" 
-         style={{ width: '280px', backgroundColor: colors.sidebar, borderRight: `1px solid ${colors.border}` }}>
+          style={{ width: '280px', backgroundColor: colors.sidebar, borderRight: `1px solid ${colors.border}` }}>
       
       {/* Branding / Logo */}
       <div className="p-4 mb-4 text-center border-bottom" style={{ borderColor: colors.border }}>
         <h4 className="font-serif fw-bold m-0" style={{ color: colors.text, letterSpacing: '2px' }}>
-          CMC <span style={{ color: colors.accent }}>ADVOCACIA</span>
+          DrJoão <span style={{ color: colors.accent }}> & Associados</span>
         </h4>
         <small className="text-uppercase opacity-50" style={{ fontSize: '9px', letterSpacing: '3px' }}>
           Intelligence System
@@ -70,6 +78,26 @@ const Sidebar = () => {
             </Link>
           );
         })}
+
+        {/* Links Externos adicionados mantendo o padrão */}
+        {externalLinks.map((link) => (
+          <a 
+            key={link.url} 
+            href={link.url} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="d-flex align-items-center gap-3 p-3 mb-2 text-decoration-none transition-all"
+            style={{ 
+              color: colors.text,
+              borderLeft: '4px solid transparent'
+            }}
+          >
+            {link.icon}
+            <span className="text-uppercase fw-bold" style={{ fontSize: '11px', letterSpacing: '1px' }}>
+              {link.label}
+            </span>
+          </a>
+        ))}
       </nav>
 
       {/* Rodapé / Usuário */}
@@ -80,8 +108,8 @@ const Sidebar = () => {
              <div className="h-100 d-flex align-items-center justify-content-center fw-bold" style={{ color: colors.accent }}>JS</div>
           </div>
           <div>
-            <div className="small fw-bold text-uppercase" style={{ fontSize: '10px' }}>Dr. João Silva</div>
-            <div className="opacity-50" style={{ fontSize: '9px' }}>OAB/SP 123.456</div>
+            <div className="small fw-bold text-uppercase" style={{ fontSize: '10px', color: colors.text }}>Dr. João</div>
+            <div className="opacity-50" style={{ fontSize: '9px', color: colors.text }}>OAB/SP 123.456</div>
           </div>
         </div>
         
