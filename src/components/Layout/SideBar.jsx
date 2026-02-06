@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react'; // Adicionado useState
 import { Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -9,12 +9,15 @@ import {
   DollarSign, 
   LogOut,
   ChevronRight,
-  Globe,        // Adicionado para o site
-  ExternalLink  // Adicionado para o PJE
+  Globe,
+  ExternalLink,
+  Menu, // Adicionado ícone de menu
+  X     // Adicionado ícone de fechar
 } from 'lucide-react';
 
 const Sidebar = () => {
   const location = useLocation();
+  const [isOpen, setIsOpen] = useState(false); // Estado para controlar abertura no mobile
   
   const colors = {
     sidebar: '#1C120E', // Nogueira
@@ -33,101 +36,149 @@ const Sidebar = () => {
     { path: '/financeiro', label: 'Honorários', icon: <DollarSign size={20} /> },
   ];
 
-  // Novos links externos
   const externalLinks = [
     { url: 'https://www.pje.jus.br/navegador/', label: 'Acessar PJE', icon: <ExternalLink size={20} /> },
     { url: 'https://www.processoagil.com.br/', label: 'Processo Agil', icon: <Globe size={20} /> },
   ];
 
-  return (
-    <div className="d-flex flex-column vh-100 shadow-lg" 
-          style={{ width: '280px', backgroundColor: colors.sidebar, borderRight: `1px solid ${colors.border}` }}>
-      
-      {/* Branding / Logo */}
-      <div className="p-4 mb-4 text-center border-bottom" style={{ borderColor: colors.border }}>
-        <h4 className="font-serif fw-bold m-0" style={{ color: colors.text, letterSpacing: '2px' }}>
-          DrJoão <span style={{ color: colors.accent }}> & Associados</span>
-        </h4>
-        <small className="text-uppercase opacity-50" style={{ fontSize: '9px', letterSpacing: '3px' }}>
-          Intelligence System
-        </small>
-      </div>
+  const toggleSidebar = () => setIsOpen(!isOpen);
 
-      {/* Navegação */}
-      <nav className="flex-grow-1 px-3">
-        {menuItems.map((item) => {
-          const isActive = location.pathname === item.path;
-          return (
-            <Link 
-              key={item.path} 
-              to={item.path} 
-              className="d-flex align-items-center justify-content-between p-3 mb-2 text-decoration-none transition-all"
+  return (
+    <>
+      {/* Botão Flutuante para Abrir no Mobile */}
+      <button 
+        className="d-md-none btn position-fixed shadow" 
+        onClick={toggleSidebar}
+        style={{ 
+          top: '10px', 
+          left: '10px', 
+          zIndex: 1100, 
+          backgroundColor: colors.sidebar, 
+          color: colors.accent,
+          border: `1px solid ${colors.border}`
+        }}
+      >
+        {isOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
+
+      {/* Overlay: Escurece o fundo quando aberto no mobile */}
+      {isOpen && (
+        <div 
+          className="d-md-none position-fixed top-0 start-0 w-100 h-100" 
+          style={{ backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 1040 }}
+          onClick={toggleSidebar}
+        />
+      )}
+
+      <div 
+        className={`sidebar-wrapper d-flex flex-column vh-100 shadow-lg ${isOpen ? 'show' : ''}`} 
+        style={{ 
+          width: '280px', 
+          backgroundColor: colors.sidebar, 
+          borderRight: `1px solid ${colors.border}`,
+          zIndex: 1050,
+          transition: 'transform 0.3s ease-in-out'
+        }}
+      >
+        
+        {/* Branding / Logo */}
+        <div className="p-4 mb-4 text-center border-bottom" style={{ borderColor: colors.border }}>
+          <h4 className="font-serif fw-bold m-0" style={{ color: colors.text, letterSpacing: '2px' }}>
+            DrJoão <span style={{ color: colors.accent }}> & Associados</span>
+          </h4>
+          <small className="text-uppercase opacity-50" style={{ fontSize: '9px', letterSpacing: '3px' }}>
+            Intelligence System
+          </small>
+        </div>
+
+        {/* Navegação */}
+        <nav className="flex-grow-1 px-3 overflow-auto">
+          {menuItems.map((item) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <Link 
+                key={item.path} 
+                to={item.path} 
+                onClick={() => setIsOpen(false)} // Fecha ao clicar no mobile
+                className="d-flex align-items-center justify-content-between p-3 mb-2 text-decoration-none transition-all"
+                style={{ 
+                  backgroundColor: isActive ? colors.bg : 'transparent',
+                  borderLeft: isActive ? `4px solid ${colors.accent}` : '4px solid transparent',
+                  color: isActive ? colors.accent : colors.text,
+                }}
+              >
+                <div className="d-flex align-items-center gap-3">
+                  {item.icon}
+                  <span className="text-uppercase fw-bold" style={{ fontSize: '11px', letterSpacing: '1px' }}>
+                    {item.label}
+                  </span>
+                </div>
+                {isActive && <ChevronRight size={14} />}
+              </Link>
+            );
+          })}
+
+          {externalLinks.map((link) => (
+            <a 
+              key={link.url} 
+              href={link.url} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="d-flex align-items-center gap-3 p-3 mb-2 text-decoration-none transition-all"
               style={{ 
-                backgroundColor: isActive ? colors.bg : 'transparent',
-                borderLeft: isActive ? `4px solid ${colors.accent}` : '4px solid transparent',
-                color: isActive ? colors.accent : colors.text,
+                color: colors.text,
+                borderLeft: '4px solid transparent'
               }}
             >
-              <div className="d-flex align-items-center gap-3">
-                {item.icon}
-                <span className="text-uppercase fw-bold" style={{ fontSize: '11px', letterSpacing: '1px' }}>
-                  {item.label}
-                </span>
-              </div>
-              {isActive && <ChevronRight size={14} />}
-            </Link>
-          );
-        })}
+              {link.icon}
+              <span className="text-uppercase fw-bold" style={{ fontSize: '11px', letterSpacing: '1px' }}>
+                {link.label}
+              </span>
+            </a>
+          ))}
+        </nav>
 
-        {/* Links Externos adicionados mantendo o padrão */}
-        {externalLinks.map((link) => (
-          <a 
-            key={link.url} 
-            href={link.url} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="d-flex align-items-center gap-3 p-3 mb-2 text-decoration-none transition-all"
-            style={{ 
-              color: colors.text,
-              borderLeft: '4px solid transparent'
-            }}
-          >
-            {link.icon}
-            <span className="text-uppercase fw-bold" style={{ fontSize: '11px', letterSpacing: '1px' }}>
-              {link.label}
-            </span>
-          </a>
-        ))}
-      </nav>
-
-      {/* Rodapé / Usuário */}
-      <div className="p-4 border-top mt-auto" style={{ borderColor: colors.border }}>
-        <div className="d-flex align-items-center gap-3 mb-4">
-          <div className="rounded-circle" style={{ width: '40px', height: '40px', backgroundColor: colors.bg, border: `1px solid ${colors.accent}` }}>
-             {/* Foto ou Iniciais */}
-             <div className="h-100 d-flex align-items-center justify-content-center fw-bold" style={{ color: colors.accent }}>JS</div>
+        {/* Rodapé / Usuário */}
+        <div className="p-4 border-top mt-auto" style={{ borderColor: colors.border }}>
+          <div className="d-flex align-items-center gap-3 mb-4">
+            <div className="rounded-circle" style={{ width: '40px', height: '40px', backgroundColor: colors.bg, border: `1px solid ${colors.accent}` }}>
+               <div className="h-100 d-flex align-items-center justify-content-center fw-bold" style={{ color: colors.accent }}>JS</div>
+            </div>
+            <div>
+              <div className="small fw-bold text-uppercase" style={{ fontSize: '10px', color: colors.text }}>Dr. João</div>
+              <div className="opacity-50" style={{ fontSize: '9px', color: colors.text }}>OAB/SP 123.456</div>
+            </div>
           </div>
-          <div>
-            <div className="small fw-bold text-uppercase" style={{ fontSize: '10px', color: colors.text }}>Dr. João</div>
-            <div className="opacity-50" style={{ fontSize: '9px', color: colors.text }}>OAB/SP 123.456</div>
-          </div>
+          
+          <Link to="/" className="btn w-100 d-flex align-items-center justify-content-center gap-2 rounded-0 fw-bold border-0" 
+                  style={{ backgroundColor: colors.bg, color: '#9e2a2b', fontSize: '11px' }}>
+            <LogOut size={16} /> SAIR DO SISTEMA
+          </Link>
         </div>
-        
-        <Link to="/" className="btn w-100 d-flex align-items-center justify-content-center gap-2 rounded-0 fw-bold border-0" 
-                style={{ backgroundColor: colors.bg, color: '#9e2a2b', fontSize: '11px' }}>
-          <LogOut size={16} /> SAIR DO SISTEMA
-        </Link>
-      </div>
 
-      {/* CSS Hover Effect */}
-      <style>{`
-        nav a:hover {
-          background-color: ${colors.bg} !important;
-          color: ${colors.accent} !important;
-          padding-left: 2rem !important;
-        }
-      `}</style>
-    </div>
+        <style>{`
+          /* Estilos para Mobile */
+          @media (max-width: 767.98px) {
+            .sidebar-wrapper {
+              position: fixed;
+              left: 0;
+              top: 0;
+              transform: translateX(-100%); /* Esconde fora da tela */
+            }
+            .sidebar-wrapper.show {
+              transform: translateX(0); /* Desliza para dentro */
+            }
+          }
+
+          /* Hover PC */
+          nav a:hover {
+            background-color: ${colors.bg} !important;
+            color: ${colors.accent} !important;
+            padding-left: 2rem !important;
+          }
+        `}</style>
+      </div>
+    </>
   );
 };
 

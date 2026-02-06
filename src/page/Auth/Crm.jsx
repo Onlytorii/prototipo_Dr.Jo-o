@@ -31,7 +31,7 @@ const PaginaCRM = () => {
                   <Users size={22} className="me-2 text-bronze" style={{ color: colors.accent }} /> Ficha do Cliente
                 </h3>
                 
-                <div className="d-flex bg-dark p-1" style={{ border: `1px solid ${colors.border}` }}>
+                <div className="d-flex bg-green p-1" style={{ border: `1px solid ${colors.border}` }}>
                   {['PF', 'PJ'].map(t => (
                     <Button 
                       key={t}
